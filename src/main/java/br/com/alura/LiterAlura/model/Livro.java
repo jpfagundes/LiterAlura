@@ -1,16 +1,37 @@
-package br.com.alura.LiterAlura.model;
+package br.com.alura.literalura.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+
+import java.util.List;
 
 @Entity
-@Table(name = "livros")
+@Table(name = "livro")
 public class Livro {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
-    @ManyToOne
-    private Autor autor;
+
+    private String idioma;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "livro_autor",
+            joinColumns = @JoinColumn(name = "livro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    private List<Autor> autores; // Lista de autores
+
 
     public Long getId() {
         return id;
@@ -28,19 +49,19 @@ public class Livro {
         this.titulo = titulo;
     }
 
-    public Autor getAutor() {
-        return autor;
+    public String getIdioma() {
+        return idioma;
     }
 
-    public void setAutor(Autor autor) {
-        this.autor = autor;
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
     }
 
-    @Override
-    public String toString() {
-        return ", Livro: '" + titulo + '\'' +
-                ", Autor: " + autor;
+    public List<Autor> getAutores() {
+        return autores;
+    }
+
+    public void setAutores(List<Autor> autores) {
+        this.autores = autores;
     }
 }
-
-

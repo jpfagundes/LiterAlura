@@ -1,28 +1,28 @@
-package br.com.alura.LiterAlura.model;
+package br.com.alura.literalura.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table (name = "autores")
+@Table(name = "autor")
 public class Autor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+
     private String nome;
-    private LocalDate dataDeNascimento;
 
-    @OneToMany(mappedBy = "autor")
-    private List<Livro> livros = new ArrayList<>();
+    private Integer anoNascimento;
 
-    public void setLivro(List<Livro> livros) {
-        this.livros = livros;
-    }
+    private Integer anoFalecimento;
 
+    @ManyToMany(mappedBy = "autores") // Relacionamento muitos-para-muitos
+    private List<Livro> livros = new ArrayList<>(); // Inicializando a lista
+
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -39,22 +39,33 @@ public class Autor {
         this.nome = nome;
     }
 
-    public LocalDate getDataDeNascimento() {
-        return dataDeNascimento;
+    public Integer getAnoNascimento() {
+        return anoNascimento;
     }
 
-    public void setDataDeNascimento(LocalDate dataDeNascimento) {
-        this.dataDeNascimento = dataDeNascimento;
+    public void setAnoNascimento(Integer anoNascimento) {
+        this.anoNascimento = anoNascimento;
     }
 
-    public List<Livro> getLivro() {
+    public Integer getAnoFalecimento() {
+        return anoFalecimento;
+    }
+
+    public void setAnoFalecimento(Integer anoFalecimento) {
+        this.anoFalecimento = anoFalecimento;
+    }
+
+    public List<Livro> getLivros() {
         return livros;
     }
 
-    @Override
-    public String toString() {
-        return "Autor: '" + nome + '\'' +
-                ", Data de Nascimento: " + dataDeNascimento +
-                ", Livros: " + livros;
+    public void setLivros(List<Livro> livros) {
+        this.livros = livros;
+    }
+
+
+    public void addLivro(Livro livro) {
+        this.livros.add(livro);
+        livro.getAutores().add(this); // Adiciona o autor ao livro também
     }
 }
